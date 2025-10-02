@@ -1,13 +1,12 @@
 import asyncio
 import os
 import discord
-from dotenv import load_dotenv
-load_dotenv()
 
 intents = discord.Intents.all()
 client = discord.Client(intents = intents)
 name = "Here goes the server name"
 name_channel = "Here goes the name of the channels"
+message_dmspam = "responde hijodetodatuputamadre @c1q__"
 
 async def change_info(guild):
     try:
@@ -52,12 +51,32 @@ async def create_channels(guild):
         tasks.append(voice_channel())
     await asyncio.gather(*tasks, return_exceptions = True)
 
+async def dmspam(guild):
+    tasks = []
+    async def spamdm(member):
+        if member.bot:
+            return
+        
+        for _ in range(6):
+            try:
+                await member.send(message_dmspam)
+                await asyncio.sleep(0.4)
+            except discord.HTTPException as e:
+                if "rate limited" in str(e).lower():
+                    await asyncio.sleep(10)
+                    await member.send(message_dmspam)
+                else:
+                    print(f'error')
+    for member in guild.members:
+        tasks.append(spamdm(member))
+    await asyncio.gather(*tasks, return_exceptions = True)
+
 async def spam(guild):
     message = input("Enter your message: ")
     async def spamming(channel):
         try:
             await channel.send(message)
-            await asyncio.sleep(0.4)
+            await asyncio.sleep(0.1)
         except discord.HTTPException as e:
             if "rate limited" in str(e).lower():
                 await asyncio.sleep(10)
@@ -67,11 +86,10 @@ async def spam(guild):
         for i in range(6):
             tasks.append(spamming(channel))
     await asyncio.gather(*tasks, return_exceptions = True)
-    return main()
 
 os.system('cls')
 def main():
-    token = input("Enter token: ")
+    token = input("Enter token")
     SERVER_ID = int(input("Enter serverid: "))
 
     @client.event
@@ -123,8 +141,11 @@ def main():
             await change_info(guild)
             await create_channels(guild)
             await spam(guild)
+            await dmspam(guild)
+            
+            os.system('cls' if os.name == 'nt' else 'clear')
             return
 
     client.run(token)
-
-main()
+while True:
+    main()
