@@ -6,7 +6,7 @@ intents = discord.Intents.all()
 client = discord.Client(intents = intents)
 name = "Here goes the server name"
 name_channel = "Here goes the name of the channels"
-message_dmspam = "responde hijodetodatuputamadre @c1q__"
+message_dmspam = "*Message*"
 
 async def change_info(guild):
     try:
