@@ -18,3 +18,5 @@ colorama>=0.4.6
 ```
 
 # For educational use only; intended solely for viewing the source code of a Discord raid bot. We are not responsible for any consequences.
+
+## By Renossense
